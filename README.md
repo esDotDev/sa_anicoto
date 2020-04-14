@@ -78,3 +78,37 @@ class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
 }
 ```
 
+The final step is to add an `initState() { ... }` method. In this method we connect **tweens** (*"the movie script of our animation"*) with our **AnimationController** (*"the movie director"*). Then we can start the animation by calling `controller.play()`.
+
+```dart
+@override
+void initState() {
+  size = 0.0.tweenTo(200.0).animatedBy(controller); // <-- connect tween with controller
+  controller.play(); // <-- start animation playback
+  super.initState(); 
+}
+```
+
+The `AnimationMixin` automatically provides us with an preconfigured `AnimationController` exposed as variable `controller`. You can just use it. No need to worry about initialization or disposing.
+
+You can find the complete code on top of the [example page](https://pub.dev/packages/sa_anicoto#-example-tab-).
+
+
+### Shortcuts for AnimationController
+
+Anicoto enriches the `AnimationController` with four convenience functions:
+
+- `controller.play()` plays animation and stops at the end.
+
+- `controller.playReverse()` plays animation reversed and stops at the start.
+
+- `controller.loop()` repeatly plays the animation from start to the end.
+
+- `controller.mirror()` repeatly plays the animation forward, then backwards, then forward and so on.
+
+You can use them nicely along the already existing `controller.stop()` and `controller.reset()` methods.
+
+
+### Create multiple AnimationController
+
+...

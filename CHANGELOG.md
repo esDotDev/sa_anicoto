@@ -1,3 +1,3 @@
-## all version untils [0.0.1]
+## all version untils [0.0.2]
 
 - experimenting with api
