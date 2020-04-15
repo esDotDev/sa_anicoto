@@ -32,13 +32,39 @@ To learn how to use Anicoto:
 
 #### Overview
 
-Configuring animation support is always three simple steps:
+Configuring animation support is three simple steps:
 
-- Add the `AnimationMixin` to the *State class* of your stateful widget
-- Declare `Animation<?>` class variables for each tween and use them in the `build()` method
-- Start using `controller` to wire `Animation<?>` class variables and call `controller.play()` inside the `initState()` method.
+- Add the `AnimationMixin` to the **state class** of your stateful widget
+- Declare `Animation<?>` **class variables** for each animated property and **use them** in your `build() {...}` method
+- Create an `initState() {...}` method and **connect tweens with the controller** by calling `tween.animatedBy(controller)`. Store that result into your `Animation<?>` variable. Finally **start the animation** with `controller.play()`.
 
-#### Three steps explained
+```dart
+class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
+    with AnimationMixin {  // Add AnimationMixin to state class
+
+  Animation<double> size; // Declare animation variable
+
+  @override
+  void initState() {
+    size = 0.0.tweenTo(200.0).animatedBy(controller); // Connect tween and controller and apply to animation variable
+    controller.play(); // Start the animation playback
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size.value, // Use animation variable's value here 
+      height: size.value, // Use animation variable's value here
+      color: Colors.red
+    );
+  }
+}
+```
+
+💪 *Note: The `AnimationMixin` generates a preconfigured AnimationController as  `controller`. You can just use it. No need to worry about initialization or disposing.*
+
+#### The three steps in more detail
 
 Creating own animations with an `AnimationController` requires state changing. For that you first create a **stateful widget** that contains the content you want to animate.
 
@@ -89,8 +115,6 @@ void initState() {
 }
 ```
 
-The `AnimationMixin` automatically provides us with an preconfigured `AnimationController` exposed as variable `controller`. You can just use it. No need to worry about initialization or disposing.
-
 You can find the complete code on top of the [example page](https://pub.dev/packages/sa_anicoto#-example-tab-).
 
 
@@ -106,9 +130,82 @@ Anicoto enriches the `AnimationController` with four convenience functions:
 
 - `controller.mirror()` repeatly plays the animation forward, then backwards, then forward and so on.
 
-You can use them nicely along the already existing `controller.stop()` and `controller.reset()` methods.
+Each of these methods take an optional `duration` named parameter to configure your animation action within one line of code.
+
+```dart
+controller.play(duration: 1500.milliseconds);
+controller.playReverse(duration: 1500.milliseconds);
+controller.loop(duration: 1500.milliseconds);
+controller.mirror(duration: 1500.milliseconds);
+```
+
+You can use these methods nicely along the already existing `controller.stop()` and `controller.reset()` methods.
 
 
 ### Create multiple AnimationController
 
-...
+With multiple AnimationController you can have many parallel animations at the same time.
+
+Anicoto's `AnimationMixin` enhances your **state class** with a method `createController()` to create multiple **managed\*** AnimationController. *("Managed" means that you don't need to care about initialization and disposing.)*
+
+#### Create a managed AnimationController
+
+First create a class variable of type `AnimationController`. Then inside the `initState() {...}` method call `createController()`. That's all.
+```dart
+class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
+    with AnimationMixin { // <-- use AnimationMixin
+  
+  AnimationController sizeController; // <-- declare custom AnimationController
+  Animation<double> size;
+
+  @override
+  void initState() {
+    sizeController = createController(); // <-- create custom AnimationController
+    size = 0.0.tweenTo(100.0).animatedBy(sizeController); // <-- animate "size" with custom AnimationController
+    sizeController.play(duration: 5.seconds); // <-- start playback on custom AnimationController
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(width: size.value, height: size.value, color: Colors.red);
+  }
+}
+```
+
+#### Create many managed AnimationController
+
+Anicoto allows you to have as many AnimationController you want. Behind the scenes it keeps track of them.
+
+```dart
+class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
+    with AnimationMixin {
+  AnimationController widthController;
+  AnimationController heightController;
+  AnimationController colorController;
+
+  Animation<double> width;
+  Animation<double> height;
+  Animation<Color> color;
+
+  @override
+  void initState() {
+    widthController = createController()..mirror(duration: 5.seconds);
+    heightController = createController()..mirror(duration: 3.seconds);
+    colorController = createController()..mirror(duration: 1500.milliseconds);
+
+    width = 100.0.tweenTo(200.0).animatedBy(widthController);
+    height = 100.0.tweenTo(200.0).animatedBy(heightController);
+    color = Colors.red.tweenTo(Colors.blue).animatedBy(colorController);
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: width.value, height: height.value, color: color.value);
+  }
+}
+```
+Isn't it insanely simple? It's Simple Animations!

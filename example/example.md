@@ -5,6 +5,8 @@
 
 ## Basic usage pattern
 
+This example shows a complete app that uses `AnimationMixin` in a simple way.
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';

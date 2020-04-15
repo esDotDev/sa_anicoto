@@ -1,12 +1,48 @@
 part of sa_anicoto;
 
+/// Extends your state class with the ability to manage an arbitrary number
+/// of [AnimationController] instances. It takes care of initialization
+/// and disposing of these instances.
+///
+/// Most use cases can be realized by start using [controller] as your main
+/// [AnimationController] instance.
+///
+/// You can create additional instances of [AnimationController] by calling
+/// [createController].
+///
+/// See API documentation for [controller] and [createController] for examples.
 mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProvider {
 
   AnimationController _mainControllerInstance;
 
   final _controllerInstances = List<AnimationController>();
 
-  // TODO doc
+  /// Returns the main [AnimationController] instance for this state class.
+  ///
+  /// Example: (using [supercharged](https://pub.dev/packages/supercharged))
+  /// ```dart
+  /// class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
+  ///     with AnimationMixin {  // Add AnimationMixin to state class
+  ///
+  ///   Animation<double> size; // Declare animation variable
+  ///
+  ///   @override
+  ///   void initState() {
+  ///     size = 0.0.tweenTo(200.0).animatedBy(controller); // Connect tween and controller and apply to animation variable
+  ///     controller.play(); // Start the animation playback
+  ///     super.initState();
+  ///   }
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Container(
+  ///         width: size.value, // Use animation variable's value here
+  ///         height: size.value, // Use animation variable's value here
+  ///         color: Colors.red
+  ///     );
+  ///   }
+  /// }
+  /// ```
   AnimationController get controller {
     if (_mainControllerInstance == null) {
       _mainControllerInstance = _newAnimationController();
@@ -14,7 +50,31 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
     return _mainControllerInstance;
   }
 
-  // TODO doc
+  /// Creates an additional [AnimationController] instance that gets initialized
+  /// and disposed by this mixin.
+  /// 
+  /// Example: (using [supercharged](https://pub.dev/packages/supercharged))
+  /// ```dart
+  /// class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
+  ///     with AnimationMixin { // <-- use AnimationMixin
+  ///
+  ///   AnimationController sizeController; // <-- declare custom AnimationController
+  ///   Animation<double> size;
+  ///
+  ///   @override
+  ///   void initState() {
+  ///     sizeController = createController(); // <-- create custom AnimationController
+  ///     size = 0.0.tweenTo(100.0).animatedBy(sizeController); // <-- animate "size" with custom AnimationController
+  ///     sizeController.play(duration: 5.seconds); // <-- start playback on custom AnimationController
+  ///     super.initState();
+  ///   }
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Container(width: size.value, height: size.value, color: Colors.red);
+  ///   }
+  /// }
+  /// ```
   AnimationController createController() {
       final instance = _newAnimationController();
       _controllerInstances.add(instance);
@@ -119,3 +179,4 @@ class _WidgetTicker extends Ticker {
     super.dispose();
   }
 }
+
