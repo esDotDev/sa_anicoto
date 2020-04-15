@@ -2,7 +2,6 @@ part of sa_anicoto;
 
 /// Method extensions on [AnimationController]
 extension AnimationControllerExtension on AnimationController {
-
   /// Starts playing the animation in forward direction.
   ///
   /// If a [duration] named parameter is provided it will be

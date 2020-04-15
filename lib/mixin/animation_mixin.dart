@@ -11,8 +11,8 @@ part of sa_anicoto;
 /// [createController].
 ///
 /// See API documentation for [controller] and [createController] for examples.
-mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProvider {
-
+mixin AnimationMixin<T extends StatefulWidget> on State<T>
+    implements TickerProvider {
   AnimationController _mainControllerInstance;
 
   final _controllerInstances = List<AnimationController>();
@@ -52,7 +52,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
 
   /// Creates an additional [AnimationController] instance that gets initialized
   /// and disposed by this mixin.
-  /// 
+  ///
   /// Example: (using [supercharged](https://pub.dev/packages/supercharged))
   /// ```dart
   /// class _MyAnimatedWidgetState extends State<MyAnimatedWidget>
@@ -76,9 +76,9 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
   /// }
   /// ```
   AnimationController createController() {
-      final instance = _newAnimationController();
-      _controllerInstances.add(instance);
-      return instance;
+    final instance = _newAnimationController();
+    _controllerInstances.add(instance);
+    return instance;
   }
 
   AnimationController _newAnimationController() {
@@ -94,7 +94,8 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
   @override
   Ticker createTicker(TickerCallback onTick) {
     _tickers ??= <_WidgetTicker>{};
-    final _WidgetTicker result = _WidgetTicker(onTick, this, debugLabel: 'created by $this');
+    final _WidgetTicker result =
+        _WidgetTicker(onTick, this, debugLabel: 'created by $this');
     _tickers.add(result);
     return result;
   }
@@ -121,14 +122,11 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
               ErrorSummary('$this was disposed with an active Ticker.'),
               ErrorDescription(
                   '$runtimeType created a Ticker via its TickerProviderStateMixin, but at the time '
-                      'dispose() was called on the mixin, that Ticker was still active. All Tickers must '
-                      'be disposed before calling super.dispose().'
-              ),
-              ErrorHint(
-                  'Tickers used by AnimationControllers '
-                      'should be disposed by calling dispose() on the AnimationController itself. '
-                      'Otherwise, the ticker will leak.'
-              ),
+                  'dispose() was called on the mixin, that Ticker was still active. All Tickers must '
+                  'be disposed before calling super.dispose().'),
+              ErrorHint('Tickers used by AnimationControllers '
+                  'should be disposed by calling dispose() on the AnimationController itself. '
+                  'Otherwise, the ticker will leak.'),
               ticker.describeForError('The offending ticker was'),
             ]);
           }
@@ -156,9 +154,9 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
     properties.add(DiagnosticsProperty<Set<Ticker>>(
       'tickers',
       _tickers,
-      description: _tickers != null ?
-      'tracking ${_tickers.length} ticker${_tickers.length == 1 ? "" : "s"}' :
-      null,
+      description: _tickers != null
+          ? 'tracking ${_tickers.length} ticker${_tickers.length == 1 ? "" : "s"}'
+          : null,
       defaultValue: null,
     ));
   }
@@ -169,7 +167,8 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
 // confusing. Instead we use the less precise but more anodyne "_WidgetTicker",
 // which attracts less attention.
 class _WidgetTicker extends Ticker {
-  _WidgetTicker(TickerCallback onTick, this._creator, { String debugLabel }) : super(onTick, debugLabel: debugLabel);
+  _WidgetTicker(TickerCallback onTick, this._creator, {String debugLabel})
+      : super(onTick, debugLabel: debugLabel);
 
   final AnimationMixin _creator;
 
@@ -179,4 +178,3 @@ class _WidgetTicker extends Ticker {
     super.dispose();
   }
 }
-
