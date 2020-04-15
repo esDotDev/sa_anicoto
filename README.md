@@ -23,9 +23,9 @@ To learn how to use Anicoto:
 
 - Continue reading this page
 - Study complete examples at
-[**example page**](https://pub.dev/packages/sa_multi_tween#-example-tab-)
+[**example page**](https://pub.dev/packages/sa_anicoto#-example-tab-)
 - Discover the
-[**API documentation**](https://pub.dev/documentation/sa_multi_tween/latest/sa_multi_tween/sa_multi_tween-library.html)
+[**API documentation**](https://pub.dev/documentation/sa_anicoto/latest/sa_anicoto/sa_anicoto-library.html)
 
 
 ### Basic usage pattern
