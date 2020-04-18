@@ -8,7 +8,7 @@ import './widget_tester_extension.dart';
 void main() {
   testWidgets("AnimationControllerExtension", (WidgetTester tester) async {
     var values = <int>[];
-    var animation = MaterialApp(home: TestWidget((value) => values.add(value)));
+    var animation = MaterialApp(home: TestWidget(values.add));
 
     await tester.addAnimationWidget(animation);
 
@@ -55,9 +55,7 @@ class _TestWidgetState extends State<TestWidget> with AnimationMixin {
   @override
   Widget build(BuildContext context) {
     widget.exposeValue(a.value);
-    return Container(
-      child: Text("${a.value}"),
-    );
+    return Container();
   }
 }
 
