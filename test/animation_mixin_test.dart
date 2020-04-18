@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sa_anicoto/sa_anicoto.dart';
 import 'package:supercharged/supercharged.dart';
+import './widget_tester_extension.dart';
 
 void main() {
-  testWidgets("builder", (WidgetTester tester) async {
-    Text text;
-
+  testWidgets("AnimationMixin", (WidgetTester tester) async {
     var animation = MaterialApp(home: TestWidget());
 
-    await tester.pumpWidget(animation);
-    await tester.pump(100.milliseconds);
+    await tester.addAnimationWidget(animation);
 
     expect(find.text("0 0"), findsOneWidget);
 
-    await tester.pump(100.days);
+    await tester.wait(100.days);
 
     expect(find.text("10 10"), findsOneWidget);
   });
