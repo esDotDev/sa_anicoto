@@ -1,3 +1,4 @@
-## all version untils [0.0.6]
+## 1.0.0
 
-- experimenting with api
+- **New:** AnimationMixin
+- **New:** AnimationController extensions
