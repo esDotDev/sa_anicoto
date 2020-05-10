@@ -44,10 +44,10 @@ class _TestWidgetState extends State<TestWidget> with AnimationMixin {
     await controller.playReverse(duration: 10.days);
 
     controller.loop(duration: 10.days);
-    await Future.delayed(20.days);
+    await Future<void>.delayed(20.days);
 
     controller.mirror(duration: 10.days);
-    await Future.delayed(20.days);
+    await Future<void>.delayed(20.days);
 
     controller.stop();
   }
