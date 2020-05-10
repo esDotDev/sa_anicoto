@@ -15,7 +15,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T>
     implements TickerProvider {
   AnimationController _mainControllerInstance;
 
-  final _controllerInstances = List<AnimationController>();
+  final _controllerInstances = <AnimationController>[];
 
   /// Returns the main [AnimationController] instance for this state class.
   ///
@@ -44,9 +44,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T>
   /// }
   /// ```
   AnimationController get controller {
-    if (_mainControllerInstance == null) {
-      _mainControllerInstance = _newAnimationController();
-    }
+    _mainControllerInstance ??= _newAnimationController();
     return _mainControllerInstance;
   }
 
@@ -94,6 +92,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T>
   @override
   Ticker createTicker(TickerCallback onTick) {
     _tickers ??= <_WidgetTicker>{};
+    // ignore: omit_local_variable_types
     final _WidgetTicker result =
         _WidgetTicker(onTick, this, debugLabel: 'created by $this');
     _tickers.add(result);
@@ -116,6 +115,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T>
     // Original dispose code
     assert(() {
       if (_tickers != null) {
+        // ignore: omit_local_variable_types
         for (Ticker ticker in _tickers) {
           if (ticker.isActive) {
             throw FlutterError.fromParts(<DiagnosticsNode>[
@@ -139,8 +139,10 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T>
 
   @override
   void didChangeDependencies() {
+    // ignore: omit_local_variable_types
     final bool muted = !TickerMode.of(context);
     if (_tickers != null) {
+      // ignore: omit_local_variable_types
       for (Ticker ticker in _tickers) {
         ticker.muted = muted;
       }

@@ -5,7 +5,7 @@ import 'package:supercharged/supercharged.dart';
 import './widget_tester_extension.dart';
 
 void main() {
-  testWidgets("AnimationMixin", (WidgetTester tester) async {
+  testWidgets('AnimationMixin', (WidgetTester tester) async {
     var values = <int>[];
     var animation = MaterialApp(home: TestWidget(values.add));
 
