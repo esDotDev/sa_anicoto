@@ -81,7 +81,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
   AnimationController _newAnimationController({double duration, bool autoplay}) {
     final controller = AnimationController(vsync: this, duration: (duration ?? 1).seconds);
     controller.addListener(() => setState(() {}));
-    if (autoplay) controller.play();
+    if (autoplay ?? false) controller.play();
     return controller;
   }
 
@@ -93,8 +93,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
   Ticker createTicker(TickerCallback onTick) {
     _tickers ??= <_WidgetTicker>{};
     // ignore: omit_local_variable_types
-    final _WidgetTicker result =
-        _WidgetTicker(onTick, this, debugLabel: 'created by $this');
+    final _WidgetTicker result = _WidgetTicker(onTick, this, debugLabel: 'created by $this');
     _tickers.add(result);
     return result;
   }
@@ -120,8 +119,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
           if (ticker.isActive) {
             throw FlutterError.fromParts(<DiagnosticsNode>[
               ErrorSummary('$this was disposed with an active Ticker.'),
-              ErrorDescription(
-                  '$runtimeType created a Ticker via its TickerProviderStateMixin, but at the time '
+              ErrorDescription('$runtimeType created a Ticker via its TickerProviderStateMixin, but at the time '
                   'dispose() was called on the mixin, that Ticker was still active. All Tickers must '
                   'be disposed before calling super.dispose().'),
               ErrorHint('Tickers used by AnimationControllers '
@@ -156,9 +154,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
     properties.add(DiagnosticsProperty<Set<Ticker>>(
       'tickers',
       _tickers,
-      description: _tickers != null
-          ? 'tracking ${_tickers.length} ticker${_tickers.length == 1 ? "" : "s"}'
-          : null,
+      description: _tickers != null ? 'tracking ${_tickers.length} ticker${_tickers.length == 1 ? "" : "s"}' : null,
       defaultValue: null,
     ));
   }
@@ -169,8 +165,7 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProv
 // confusing. Instead we use the less precise but more anodyne "_WidgetTicker",
 // which attracts less attention.
 class _WidgetTicker extends Ticker {
-  _WidgetTicker(TickerCallback onTick, this._creator, {String debugLabel})
-      : super(onTick, debugLabel: debugLabel);
+  _WidgetTicker(TickerCallback onTick, this._creator, {String debugLabel}) : super(onTick, debugLabel: debugLabel);
 
   final AnimationMixin _creator;
 
