@@ -11,8 +11,7 @@ part of sa_anicoto;
 /// [createController].
 ///
 /// See API documentation for [controller] and [createController] for examples.
-mixin AnimationMixin<T extends StatefulWidget> on State<T>
-    implements TickerProvider {
+mixin AnimationMixin<T extends StatefulWidget> on State<T> implements TickerProvider {
   AnimationController _mainControllerInstance;
 
   final _controllerInstances = <AnimationController>[];
@@ -73,15 +72,16 @@ mixin AnimationMixin<T extends StatefulWidget> on State<T>
   ///   }
   /// }
   /// ```
-  AnimationController createController() {
-    final instance = _newAnimationController();
+  AnimationController createController({double duration, bool autoplay}) {
+    final instance = _newAnimationController(duration: duration, autoplay: autoplay);
     _controllerInstances.add(instance);
     return instance;
   }
 
-  AnimationController _newAnimationController() {
-    final controller = AnimationController(vsync: this, duration: 1.seconds);
+  AnimationController _newAnimationController({double duration, bool autoplay}) {
+    final controller = AnimationController(vsync: this, duration: (duration ?? 1).seconds);
     controller.addListener(() => setState(() {}));
+    if (autoplay) controller.play();
     return controller;
   }
 
